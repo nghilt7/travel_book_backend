@@ -39,6 +39,7 @@ const createNewUser = async (data) => {
       DT: "",
     };
   } catch (error) {
+    console.log(error);
     return {
       EC: 1,
       EM: "error from service",

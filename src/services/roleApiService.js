@@ -121,9 +121,94 @@ const deleteRole = async (id) => {
   }
 };
 
+const getRoleByGroup = async (groupId) => {
+  try {
+    if (!groupId) {
+      return {
+        EC: 1,
+        EM: "Not found group id",
+        DT: "",
+      };
+    }
+
+    let roles = await db.Group.findOne({
+      where: { id: groupId },
+      attributes: ["id", "name", "description"],
+      include: {
+        model: db.Role,
+        attributes: ["id", "url", "description"],
+        through: { attributes: [] },
+      },
+    });
+
+    return {
+      EM: `Get roles by group successfully`,
+      EC: 0,
+      DT: roles,
+    };
+  } catch (error) {
+    return {
+      EC: 1,
+      EM: "error from service",
+      DT: "",
+    };
+  }
+};
+
+const assignRoleToGroup = async (data) => {
+  try {
+    const { roleId, groupId } = data;
+
+    // check role is exist?
+    let role = await db.Role.findOne({
+      where: { id: roleId },
+    });
+
+    if (!role) {
+      return {
+        EC: 1,
+        EM: "Role is not exist",
+        DT: "",
+      };
+    }
+
+    // check group is exist?
+    let group = await db.Group.findOne({
+      where: { id: groupId },
+    });
+
+    if (!group) {
+      return {
+        EC: 1,
+        EC: "Group is not exist",
+        DT: "",
+      };
+    }
+
+    await db.Group_Role.create({
+      roleId,
+      groupId,
+    });
+
+    return {
+      EC: 0,
+      EM: "Assign role to group successfully",
+      DT: "",
+    };
+  } catch (error) {
+    return {
+      EC: 1,
+      EM: "error from service",
+      DT: "",
+    };
+  }
+};
+
 module.exports = {
   createNewRole,
   getAllRoles,
   updateRole,
   deleteRole,
+  assignRoleToGroup,
+  getRoleByGroup,
 };

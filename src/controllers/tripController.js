@@ -1,8 +1,8 @@
-import roleApiService from "../services/roleApiService";
+import tripApiService from "../services/tripApiService";
 
 const createFunc = async (req, res) => {
   try {
-    let data = await roleApiService.createNewRole(req.body);
+    let data = await tripApiService.createNewTrip(req.body);
     return res.status(200).json({
       EC: data.EC,
       EM: data.EM,
@@ -20,7 +20,7 @@ const createFunc = async (req, res) => {
 
 const readFunc = async (req, res) => {
   try {
-    let data = await roleApiService.getAllRoles();
+    let data = await tripApiService.getAllTrips();
     return res.status(200).json({
       EC: data.EC,
       EM: data.EM,
@@ -38,7 +38,7 @@ const readFunc = async (req, res) => {
 
 const updateFunc = async (req, res) => {
   try {
-    let data = await roleApiService.updateRole(req.body);
+    let data = await tripApiService.updateTrip(req.body);
     return res.status(200).json({
       EC: data.EC,
       EM: data.EM,
@@ -56,43 +56,7 @@ const updateFunc = async (req, res) => {
 
 const deleteFunc = async (req, res) => {
   try {
-    let data = await roleApiService.deleteRole(req.body.id);
-    return res.status(200).json({
-      EC: data.EC,
-      EM: data.EM,
-      DT: data.DT,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      EC: -1,
-      EM: "error from controller",
-      DT: "",
-    });
-  }
-};
-
-const getRoleByGroup = async (req, res) => {
-  try {
-    let data = await roleApiService.getRoleByGroup(req.params.groupId);
-    return res.status(200).json({
-      EC: data.EC,
-      EM: data.EM,
-      DT: data.DT,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      EC: -1,
-      EM: "error from controller",
-      DT: "",
-    });
-  }
-};
-
-const assignRoleToGroup = async (req, res) => {
-  try {
-    let data = await roleApiService.assignRoleToGroup(req.body);
+    let data = await tripApiService.deleteTrip(req.body.id);
     return res.status(200).json({
       EC: data.EC,
       EM: data.EM,
@@ -113,6 +77,4 @@ module.exports = {
   readFunc,
   updateFunc,
   deleteFunc,
-  assignRoleToGroup,
-  getRoleByGroup,
 };

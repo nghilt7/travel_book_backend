@@ -1,8 +1,8 @@
-import roleApiService from "../services/roleApiService";
+import costApiService from "../services/costApiService";
 
 const createFunc = async (req, res) => {
   try {
-    let data = await roleApiService.createNewRole(req.body);
+    let data = await costApiService.createNewCost(req.body);
     return res.status(200).json({
       EC: data.EC,
       EM: data.EM,
@@ -20,7 +20,7 @@ const createFunc = async (req, res) => {
 
 const readFunc = async (req, res) => {
   try {
-    let data = await roleApiService.getAllRoles();
+    let data = await costApiService.getAllCosts();
     return res.status(200).json({
       EC: data.EC,
       EM: data.EM,
@@ -38,7 +38,7 @@ const readFunc = async (req, res) => {
 
 const updateFunc = async (req, res) => {
   try {
-    let data = await roleApiService.updateRole(req.body);
+    let data = await costApiService.updateCost(req.body);
     return res.status(200).json({
       EC: data.EC,
       EM: data.EM,
@@ -56,7 +56,7 @@ const updateFunc = async (req, res) => {
 
 const deleteFunc = async (req, res) => {
   try {
-    let data = await roleApiService.deleteRole(req.body.id);
+    let data = await costApiService.deleteCost(req.body.id);
     return res.status(200).json({
       EC: data.EC,
       EM: data.EM,
@@ -72,9 +72,9 @@ const deleteFunc = async (req, res) => {
   }
 };
 
-const getRoleByGroup = async (req, res) => {
+const getCostsByTrip = async (req, res) => {
   try {
-    let data = await roleApiService.getRoleByGroup(req.params.groupId);
+    let data = await costApiService.getCostsByTrip(req.params.tripId);
     return res.status(200).json({
       EC: data.EC,
       EM: data.EM,
@@ -90,9 +90,9 @@ const getRoleByGroup = async (req, res) => {
   }
 };
 
-const assignRoleToGroup = async (req, res) => {
+const assignCostToTrip = async (req, res) => {
   try {
-    let data = await roleApiService.assignRoleToGroup(req.body);
+    let data = await costApiService.assignCostToTrip(req.body);
     return res.status(200).json({
       EC: data.EC,
       EM: data.EM,
@@ -113,6 +113,6 @@ module.exports = {
   readFunc,
   updateFunc,
   deleteFunc,
-  assignRoleToGroup,
-  getRoleByGroup,
+  getCostsByTrip,
+  assignCostToTrip,
 };
