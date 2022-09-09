@@ -1,15 +1,27 @@
 import express from "express";
+
 import testController from "../controllers/testController";
 import userController from "../controllers/userController";
 import roleController from "../controllers/roleController";
 import groupController from "../controllers/groupController";
 import tripController from "../controllers/tripController";
 import costController from "../controllers/costController";
+import authController from "../controllers/authController";
+import { checkUserJWT, checkUserPermission } from "../middlewares/JWTAction";
 
 const router = express.Router();
 
 const initApiRoutes = (app) => {
+  // middlewares
+
+  router.all("*", checkUserJWT, checkUserPermission);
+
   router.get("/", testController.testHello);
+
+  // Auth
+  router.post("/register", authController.handleRegister);
+  router.post("/login", authController.handleLogin);
+  router.post("/logout", authController.handleLogout);
 
   // USER
   router.post("/user/create", userController.createFunc);

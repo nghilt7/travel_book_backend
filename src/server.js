@@ -1,6 +1,7 @@
 require("dotenv").config();
 import express from "express";
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 
 import configViewEngine from "./config/viewEngine";
 import initApiRoutes from "./routes/api";
@@ -14,6 +15,9 @@ configViewEngine(app);
 
 // check connection database
 connection();
+
+// config cookie parser
+app.use(cookieParser());
 
 // config body parser to get req from client
 app.use(bodyParser.json());

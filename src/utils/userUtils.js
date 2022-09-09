@@ -19,7 +19,12 @@ const hashUserPassword = (userPassword) => {
   return passwordHash;
 };
 
+const checkUserPassword = (inputPassword, hashPassword) => {
+  return bcrypt.compareSync(inputPassword, hashPassword);
+};
+
 module.exports = {
   checkEmail,
   hashUserPassword,
+  checkUserPassword,
 };
