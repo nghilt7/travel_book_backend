@@ -59,10 +59,6 @@ const initApiRoutes = (app) => {
   router.put("/cost/update", costController.updateFunc);
   router.delete("/cost/delete", costController.deleteFunc);
 
-  // COST TRIP
-  router.post("/cost/assign-to-trip", costController.assignCostToTrip);
-  router.get("/cost/by-trip/:tripId", costController.getCostsByTrip);
-
   return app.use("/api/v1", router);
 };
 

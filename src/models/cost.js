@@ -9,10 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Cost.belongsToMany(models.Trip, {
-        through: "Trip_Cost",
-        foreignKey: "tripId",
-      });
+      Cost.belongsTo(models.Trip, { foreignKey: "tripId" });
     }
   }
   Cost.init(
@@ -20,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       costType: DataTypes.STRING,
       costValue: DataTypes.STRING,
       costDescription: DataTypes.STRING,
+      tripId: DataTypes.INTEGER,
     },
     {
       sequelize,

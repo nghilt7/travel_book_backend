@@ -72,47 +72,9 @@ const deleteFunc = async (req, res) => {
   }
 };
 
-const getCostsByTrip = async (req, res) => {
-  try {
-    let data = await costApiService.getCostsByTrip(req.params.tripId);
-    return res.status(200).json({
-      EC: data.EC,
-      EM: data.EM,
-      DT: data.DT,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      EC: -1,
-      EM: "error from controller",
-      DT: "",
-    });
-  }
-};
-
-const assignCostToTrip = async (req, res) => {
-  try {
-    let data = await costApiService.assignCostToTrip(req.body);
-    return res.status(200).json({
-      EC: data.EC,
-      EM: data.EM,
-      DT: data.DT,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      EC: -1,
-      EM: "error from controller",
-      DT: "",
-    });
-  }
-};
-
 module.exports = {
   createFunc,
   readFunc,
   updateFunc,
   deleteFunc,
-  getCostsByTrip,
-  assignCostToTrip,
 };

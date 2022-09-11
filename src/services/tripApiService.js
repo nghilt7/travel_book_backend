@@ -57,6 +57,16 @@ const getAllTrips = async () => {
           attributes: ["id", "name", "description"],
         },
       },
+      include: {
+        model: db.Cost,
+        attributes: [
+          "id",
+          "costType",
+          "costValue",
+          "costDescription",
+          "tripId",
+        ],
+      },
     });
 
     if (trip) {

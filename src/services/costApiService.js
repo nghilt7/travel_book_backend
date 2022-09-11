@@ -2,16 +2,12 @@ import db from "../models/index";
 
 const createNewCost = async (data) => {
   try {
-    const { costType, costValue, costDescription } = data;
+    const { costType, costValue, costDescription, tripId } = data;
 
-    let cost = await db.Cost.findOne({
-      where: { costType },
-    });
-
-    if (cost) {
+    if (!tripId) {
       return {
         EC: 1,
-        EM: "This cost type have already exist",
+        EM: "Not found trip id",
         DT: "",
       };
     }
@@ -20,6 +16,7 @@ const createNewCost = async (data) => {
       costType,
       costValue,
       costDescription,
+      tripId,
     });
 
     return {
@@ -39,7 +36,7 @@ const createNewCost = async (data) => {
 const getAllCosts = async () => {
   try {
     let cost = await db.Cost.findAll({
-      attributes: ["id", "costType", "costValue", "costDescription"],
+      attributes: ["id", "costType", "costValue", "costDescription", "tripId"],
     });
 
     if (cost) {
@@ -66,7 +63,7 @@ const getAllCosts = async () => {
 
 const updateCost = async (data) => {
   try {
-    const { id, costType, costValue, costDescription } = data;
+    const { id, costValue, costDescription } = data;
 
     let cost = await db.Cost.findOne({
       where: { id },
@@ -74,7 +71,6 @@ const updateCost = async (data) => {
 
     if (cost) {
       await cost.update({
-        costType,
         costValue,
         costDescription,
       });
@@ -130,101 +126,9 @@ const deleteCost = async (id) => {
   }
 };
 
-const getCostsByTrip = async (tripId) => {
-  try {
-    if (!tripId) {
-      return {
-        EC: 1,
-        EM: "Not found trip id",
-        DT: "",
-      };
-    }
-
-    let costs = await db.Trip.findOne({
-      where: { id: tripId },
-      attributes: [
-        "id",
-        "tripName",
-        "startPlace",
-        "startDate",
-        "destination",
-        "duration",
-      ],
-      include: {
-        model: db.Cost,
-        attributes: ["id", "costType", "costValue", "costDescription"],
-        through: { attributes: [] },
-      },
-    });
-
-    return {
-      EM: `Get costs by trip successfully`,
-      EC: 0,
-      DT: costs,
-    };
-  } catch (error) {
-    return {
-      EC: 1,
-      EM: "error from service",
-      DT: "",
-    };
-  }
-};
-
-const assignCostToTrip = async (data) => {
-  try {
-    const { tripId, costId } = data;
-
-    // check trip is exist?
-    let trip = await db.Trip.findOne({
-      where: { id: tripId },
-    });
-
-    if (!trip) {
-      return {
-        EC: 1,
-        EM: "Trip is not exist",
-        DT: "",
-      };
-    }
-
-    // check cost is exist?
-    let cost = await db.Cost.findOne({
-      where: { id: costId },
-    });
-
-    if (!cost) {
-      return {
-        EC: 1,
-        EC: "Cost is not exist",
-        DT: "",
-      };
-    }
-
-    await db.Trip_Cost.create({
-      tripId,
-      costId,
-    });
-
-    return {
-      EC: 0,
-      EM: "Assign cost to trip successfully",
-      DT: "",
-    };
-  } catch (error) {
-    return {
-      EC: 1,
-      EM: "error from service",
-      DT: "",
-    };
-  }
-};
-
 module.exports = {
   createNewCost,
   getAllCosts,
   updateCost,
   deleteCost,
-  getCostsByTrip,
-  assignCostToTrip,
 };
