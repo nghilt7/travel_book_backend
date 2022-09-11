@@ -158,9 +158,38 @@ const deleteTrip = async (id) => {
   }
 };
 
+const getTripByUserId = async (userId) => {
+  try {
+    let trip = await db.Trip.findAll({
+      where: { userId },
+    });
+
+    if (trip) {
+      return {
+        EC: 0,
+        EM: "Get trip by user id successfully",
+        DT: trip,
+      };
+    } else {
+      return {
+        EC: 0,
+        EM: "Get trip by user id successfully",
+        DT: "",
+      };
+    }
+  } catch (error) {
+    return {
+      EC: 1,
+      EM: "error from service",
+      DT: "",
+    };
+  }
+};
+
 module.exports = {
   createNewTrip,
   getAllTrips,
   updateTrip,
   deleteTrip,
+  getTripByUserId,
 };

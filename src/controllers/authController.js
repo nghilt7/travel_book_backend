@@ -44,8 +44,6 @@ const handleLogin = async (req, res) => {
       });
     }
 
-    console.log(">>> check", data.DT.access_token);
-
     return res.status(200).json({
       EC: data.EC,
       EM: data.EM,

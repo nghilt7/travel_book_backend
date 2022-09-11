@@ -72,9 +72,28 @@ const deleteFunc = async (req, res) => {
   }
 };
 
+const getTripByUserId = async (req, res) => {
+  try {
+    let data = await tripApiService.getTripByUserId(req.params.userId);
+    return res.status(200).json({
+      EC: data.EC,
+      EM: data.EM,
+      DT: data.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      EC: -1,
+      EM: "error from controller",
+      DT: "",
+    });
+  }
+};
+
 module.exports = {
   createFunc,
   readFunc,
   updateFunc,
   deleteFunc,
+  getTripByUserId,
 };
