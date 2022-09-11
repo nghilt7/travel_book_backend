@@ -6,12 +6,16 @@ import cookieParser from "cookie-parser";
 import configViewEngine from "./config/viewEngine";
 import initApiRoutes from "./routes/api";
 import connection from "./config/connectDB";
+import configCors from "./config/configCors";
 
 const app = express();
 const PORT = process.env.PORT || 7070;
 
 // config view and static folder
 configViewEngine(app);
+
+// config cors
+configCors(app);
 
 // check connection database
 connection();
