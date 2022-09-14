@@ -78,8 +78,48 @@ const handleLogout = async (req, res) => {
   }
 };
 
+const handleChangeProfile = async (req, res) => {
+  try {
+    let data = await authApiService.handleChangeProfile(req.body);
+
+    return res.status(200).json({
+      EC: data.EC,
+      EM: data.EM,
+      DT: data.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      EC: -1,
+      EM: "error from controller",
+      DT: "",
+    });
+  }
+};
+
+const handleChangePassword = async (req, res) => {
+  try {
+    let data = await authApiService.handleChangePassword(req.body);
+
+    return res.status(200).json({
+      EC: data.EC,
+      EM: data.EM,
+      DT: data.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      EC: -1,
+      EM: "error from controller",
+      DT: "",
+    });
+  }
+};
+
 module.exports = {
   handleRegister,
   handleLogin,
   handleLogout,
+  handleChangeProfile,
+  handleChangePassword,
 };

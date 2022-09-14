@@ -22,6 +22,8 @@ const initApiRoutes = (app) => {
   router.post("/register", authController.handleRegister);
   router.post("/login", authController.handleLogin);
   router.post("/logout", authController.handleLogout);
+  router.post("/change-profile", authController.handleChangeProfile);
+  router.post("/change-password", authController.handleChangePassword);
 
   // USER
   router.post("/user/create", userController.createFunc);

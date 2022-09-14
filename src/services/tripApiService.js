@@ -93,15 +93,7 @@ const getAllTrips = async () => {
 
 const updateTrip = async (data) => {
   try {
-    const {
-      id,
-      tripName,
-      startPlace,
-      startDate,
-      destination,
-      duration,
-      userId,
-    } = data;
+    const { id, startPlace, startDate, destination, duration } = data;
 
     let trip = await db.Trip.findOne({
       where: { id },
@@ -109,12 +101,10 @@ const updateTrip = async (data) => {
 
     if (trip) {
       await trip.update({
-        tripName,
         startPlace,
         startDate,
         destination,
         duration,
-        userId,
       });
 
       return {
@@ -130,6 +120,7 @@ const updateTrip = async (data) => {
       };
     }
   } catch (error) {
+    console.log(error);
     return {
       EC: 1,
       EM: "error from service",
@@ -172,6 +163,42 @@ const getTripByUserId = async (userId) => {
   try {
     let trip = await db.Trip.findAll({
       where: { userId },
+      attributes: [
+        "id",
+        "tripName",
+        "startPlace",
+        "startDate",
+        "destination",
+        "duration",
+        "userId",
+      ],
+      include: {
+        model: db.User,
+        attributes: [
+          "id",
+          "email",
+          "username",
+          "address",
+          "phone",
+          "sex",
+          "imgUrl",
+          "groupId",
+        ],
+        include: {
+          model: db.Group,
+          attributes: ["id", "name", "description"],
+        },
+      },
+      include: {
+        model: db.Cost,
+        attributes: [
+          "id",
+          "costType",
+          "costValue",
+          "costDescription",
+          "tripId",
+        ],
+      },
     });
 
     if (trip) {

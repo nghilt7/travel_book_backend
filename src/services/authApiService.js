@@ -37,7 +37,6 @@ const handleUserRegister = async (data) => {
       DT: "",
     };
   } catch (error) {
-    console.log(error);
     return {
       EC: 1,
       EM: "error from service",
@@ -74,6 +73,7 @@ const handleUserLogin = async (data) => {
         let payload = {
           email: user.email,
           username: user.username,
+          userId: user.id,
           GroupWithListRolesOfUser,
         };
 
@@ -85,6 +85,7 @@ const handleUserLogin = async (data) => {
           DT: {
             username: user.username,
             email: user.email,
+            userId: user.id,
             access_token: token,
             GroupWithListRolesOfUser,
           },
@@ -95,6 +96,91 @@ const handleUserLogin = async (data) => {
     return {
       EC: 1,
       EM: "Login fail! Please check your email or your password again.",
+      DT: "",
+    };
+  } catch (error) {
+    return {
+      EC: 1,
+      EM: "error from service",
+      DT: "",
+    };
+  }
+};
+
+const handleChangeProfile = async (data) => {
+  try {
+    const { id, username } = data;
+
+    let user = await db.User.findOne({
+      where: { id },
+    });
+
+    if (user) {
+      await user.update({
+        username,
+      });
+
+      return {
+        EC: 0,
+        EM: "Update user successfully",
+        DT: "",
+      };
+    }
+
+    return {
+      EC: 1,
+      EM: "User not found",
+      DT: "",
+    };
+  } catch (error) {
+    return {
+      EC: 1,
+      EM: "error from service",
+      DT: "",
+    };
+  }
+};
+
+const handleChangePassword = async (data) => {
+  try {
+    const { id, currentPassword, newPassword } = data;
+
+    let user = await db.User.findOne({
+      where: { id },
+    });
+
+    if (user) {
+      // check password
+
+      let isCorrectPassword = await userUtils.checkUserPassword(
+        currentPassword,
+        user.password
+      );
+
+      if (!isCorrectPassword) {
+        return {
+          EC: 1,
+          EM: "Your current password is not correct",
+          DT: "",
+        };
+      }
+
+      let newPasswordHash = await userUtils.hashUserPassword(newPassword);
+
+      await user.update({
+        password: newPasswordHash,
+      });
+
+      return {
+        EC: 0,
+        EM: "Change password successfully",
+        DT: "",
+      };
+    }
+
+    return {
+      EC: 1,
+      EM: "User not found",
       DT: "",
     };
   } catch (error) {
@@ -110,4 +196,6 @@ const handleUserLogin = async (data) => {
 module.exports = {
   handleUserRegister,
   handleUserLogin,
+  handleChangeProfile,
+  handleChangePassword,
 };
